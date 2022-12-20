@@ -1,0 +1,50 @@
+.text {
+    font-size: 20px;
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+
+.time-div {
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.time > div {
+    margin-bottom: 20px;
+}
+
+.start-btn {
+    background-color: rgba(0, 0, 0, .2);
+}
+
+.time .react-datepicker-wrapper .react-datepicker__input-container input {
+    background-color: transparent;
+    border: none;
+    font-size: 25px;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    height: 40px;
+    width: 440px;
+}
+.time .react-datepicker-wrapper .react-datepicker__input-container input:active {
+    border: none;
+}
+
+.time .rdt input:hover {
+    background-color: rgba(0, 0, 0, .05);
+}
+
+.result {
+    font-size: 26px;
+    font-weight: bold;
+    border: 1px solid rgba(0,0,0,.87);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.result-action a {
+    text-decoration: underline;
+    color: rgba(0,0,0,.87);
+}
