@@ -9,7 +9,8 @@ const Button = ({
         right, 
         basic, 
         style,
-        className
+        className,
+        disabled,
     }) => {
     return (
         <button 
@@ -21,6 +22,7 @@ const Button = ({
                 ${basic ? "basic" : ""}
                 ${className ? className : ""}
             `}
+            disabled={disabled}
             style={style}
             onClick={onClick}
         >

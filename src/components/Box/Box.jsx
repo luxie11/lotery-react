@@ -10,7 +10,7 @@ const Box = ({id, isOpen, image, width, height }) => {
     }
     return (
         <div 
-            className={`box ${isOpen ? "test" : ""}`} 
+            className={`box ${isOpen ? "opened" : ""}`} 
             id={`box-${id}`}
             data-box={id}
             style={style.box}

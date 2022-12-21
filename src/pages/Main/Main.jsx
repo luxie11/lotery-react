@@ -14,33 +14,16 @@ import "react-datepicker/dist/react-datepicker.css";
 import Result from "../../components/Result";
 import "./style.css";
 
-// ==================================
-// Changable 
+let timer;
 const BOXES_NUMBER = 49;        // Boxes number
 const COLUMNS = 7;              // Columns number
 const ROWS = 7;                 // Rows number
 const SECONDS = 10;             // How much time it takes to open boxes
 const BOXES_ITERATION = 7;      // How many boxes open after some time takes over
-const BOX_WIDTH = 100;          // Boxes width
-const BOX_HEIGHT = 100;         // Boxes height
 const PASSCODE = "test123";     // Passcode which user has to guess it
-// ==================================
-let timer;
-
-const style = {
-    grid:{
-        width: '100%',
-        display:'grid',
-        gridTemplateColumns: `repeat(${COLUMNS}, ${BOX_WIDTH}px)`,
-        gridTemplateRows: `repeat(${ROWS}, ${BOX_HEIGHT}px)`,
-    },
-    startButton: {
-        width: "200px",
-        textTransform: "uppercase"
-    }
-}
 
 const Main = () => {
+
     const [inputState, setInputState] = useState("");
     const [counter, setCounter] = useState(0);
     const [boxesArray, setBoxesArray] = useState([]);
@@ -49,12 +32,42 @@ const Main = () => {
         status: false,
         result: "",
     });
-    const [date, setDate] = useState({
-        isChanged: false,
-        date: new Date()
-    });
+    // const [date, setDate] = useState({
+    //     isChanged: false,
+    //     date: new Date()
+    // });
     const countRef = useRef(null);
     countRef.current = counter;
+
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth)
+    const [windowHeight, setWindowHeight] = useState(window.innerHeight)
+    const setWindowDimensions = () => {
+        setWindowWidth(window.innerWidth)
+        setWindowHeight(window.innerHeight)
+    }
+
+    const BOX_WIDTH = windowWidth >= 768 ? 100 : 60;          // Boxes width
+    const BOX_HEIGHT = windowWidth >= 768 ? 100 : 60;         // Boxes height
+    const style = {
+        grid:{
+            width: '100%',
+            display:'grid',
+            gridTemplateColumns: `repeat(${COLUMNS}, ${BOX_WIDTH}px)`,
+            gridTemplateRows: `repeat(${ROWS}, ${BOX_HEIGHT}px)`,
+        },
+        startButton: {
+            width: "200px",
+            textTransform: "uppercase"
+        }
+    }    
+
+    console.log(windowWidth <= 768)
+    useEffect(() => {
+        window.addEventListener('resize', setWindowDimensions);
+        return () => {
+            window.removeEventListener('resize', setWindowDimensions)
+        }
+    }, [])
 
     useEffect(() => {
         if(isStarted){
@@ -93,16 +106,16 @@ const Main = () => {
         }
     }, [boxesArray]);
 
-    useEffect(() => {
-        if (date.isChanged) {
-            clearInterval(timer);
-            timer = setInterval(() => {
-                if (date.date.toISOString() <= new Date().toISOString()) {
-                    setIsStarted(true)
-                }
-            }, 1 * 1000)
-        }
-    }, [date]);
+    // useEffect(() => {
+    //     if (date.isChanged) {
+    //         clearInterval(timer);
+    //         timer = setInterval(() => {
+    //             if (date.date.toISOString() <= new Date().toISOString()) {
+    //                 setIsStarted(true)
+    //             }
+    //         }, 1 * 1000)
+    //     }
+    // }, [date]);
 
 
     const Boxes = () => {
@@ -177,22 +190,6 @@ const Main = () => {
                         <div className="wrapper" style={style.grid}>
                             { boxesArray ? <Boxes /> : <Loader /> }
                         </div>
-                        <div className="actions">
-                            <Input
-                                placeholder=""
-                                value={inputState}
-                                type="text"
-                                onChange={setInputState}
-                            />
-                            <Button 
-                                title="Enter"
-                                color="green"
-                                onClick={() => {
-                                    userInputCheck()
-                                }}
-                                right
-                            />
-                        </div>
                     </>
                 ) : 
                 isStarted && isFinished.status ? (<UserResult />) 
@@ -206,7 +203,10 @@ const Main = () => {
                                 Set Date / Time
                             </div>
                             <div className="time">
-                            <DatePicker
+                                <div>
+                                    2022-12-20 13:40
+                                </div>
+                            {/* <DatePicker
                                 selected={date.date}
                                 onChange={(date) => setDate({
                                     isChanged: true,
@@ -214,7 +214,7 @@ const Main = () => {
                                 })}
                                 showTimeSelect
                                 dateFormat="MMMM d, yyyy h:mm aa"
-                                />
+                                /> */}
                             </div>
                             <div className="text">
                                Manual Start
@@ -231,6 +231,24 @@ const Main = () => {
                     </div>
                 )
             }
+             <div className="actions">
+                <Input
+                    placeholder=""
+                    value={inputState}
+                    type="text"
+                    onChange={setInputState}
+                    disabled={!isStarted || isFinished.status}
+                />
+                <Button 
+                    title="Enter"
+                    color="green"
+                    onClick={() => {
+                        userInputCheck()
+                    }}
+                    right
+                    disabled={!isStarted || isFinished.status}
+                />
+            </div>
         </Container>
     )
 };
